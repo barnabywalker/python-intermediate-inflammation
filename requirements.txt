@@ -5,7 +5,7 @@ fonttools==4.33.3
 iniconfig==1.1.1
 kiwisolver==1.4.2
 matplotlib==3.5.2
-numpy==1.22.4
+numpy==1.21.6
 packaging==21.3
 Pillow==9.1.1
 pluggy==1.0.0
