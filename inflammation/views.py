@@ -2,6 +2,44 @@
 
 from matplotlib import pyplot as plt
 import numpy as np
+from inflammation.serializers import PatientJSONSerializer, PatientCSVSerializer
+
+def display_patient_record(patient):
+    """Display data for a single patient."""
+    print(patient.name)
+    for obs in patient.observations:
+        print(obs.day, obs.value)
+
+
+def save_patient_records(patients, path):
+    """Save data for a set of patients as JSON.
+
+    :param patients: A list of patient objects
+    :param path: A str specifying the json file to save to
+    :returns: the path that was provided
+    """
+    if path.endswith(".json"):
+        PatientJSONSerializer.save(patients, path)
+    elif path.endswith(".csv"):
+        PatientCSVSerializer.save(patients, path)
+    else:
+        raise NotImplementedError(f"No serialiser implemented for file type {path.split('.')[-1]}")
+    
+    return path
+
+
+def load_patient_records(path):
+    """Load data for a set of patients from a JSON file
+    : param path: A str specifying the path to a json file to load data from.
+    : returns: A list of patient objects.
+    """
+    if path.endswith(".json"):
+        data = PatientJSONSerializer.load(path)
+    elif path.endswith(".csv"):
+        data = PatientCSVSerializer.load(path)
+    else:
+        raise NotImplementedError(f"No serialiser implemented for file type {path.split('.')[-1]}")
+    return data
 
 
 def visualize(data_dict):
