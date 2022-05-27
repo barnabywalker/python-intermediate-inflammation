@@ -2,6 +2,32 @@
 
 from matplotlib import pyplot as plt
 import numpy as np
+from inflammation.serializers import PatientJSONSerializer
+
+def display_patient_record(patient):
+    """Display data for a single patient."""
+    print(patient.name)
+    for obs in patient.observations:
+        print(obs.day, obs.value)
+
+
+def save_patient_records(patients, path):
+    """Save data for a set of patients as JSON.
+
+    :param patients: A list of patient objects
+    :param path: A str specifying the json file to save to
+    :returns: the path that was provided
+    """
+    PatientJSONSerializer.save(patients, path)
+    return path
+
+
+def load_patient_records(path):
+    """Load data for a set of patients from a JSON file
+    : param path: A str specifying the path to a json file to load data from.
+    : returns: A list of patient objects.
+    """
+    return PatientJSONSerializer.load(path)
 
 
 def visualize(data_dict):
