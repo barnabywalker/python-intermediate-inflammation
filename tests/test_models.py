@@ -82,3 +82,40 @@ def test_patient_normalise(test, expected, expect_raises):
             npt.assert_almost_equal(patient_normalise(test), np.array(expected), decimal=2)
     else:
         npt.assert_almost_equal(patient_normalise(test), np.array(expected), decimal=2)
+
+
+@pytest.mark.parametrize(
+    "test, expected, expect_raises",
+    [
+        ([[[1, 2, 3], [4, 5, 6], [7, 8, 9]], ["Gregg", "Jane", "Geoff"]],
+         [{"name": "Gregg", "data": [1, 2, 3]},
+          {"name": "Jane", "data": [4, 5, 6]},
+          {"name": "Geoff", "data": [7, 8, 9]}],
+         None),
+        ([[[1, 2, 3], [4, 5, 6], [7, 8, 9]], "Gregg"],
+         [{"name": "Gregg", "data": [1, 2, 3]},
+          {"name": "Jane", "data": [4, 5, 6]},
+          {"name": "Geoff", "data": [7, 8, 9]}],
+         TypeError),
+        ([[[1, 2, 3], [4, 5, 6], [7, 8, 9]], ["Gregg", "Jane"]],
+         [{"name": "Gregg", "data": [1, 2, 3]},
+          {"name": "Jane", "data": [4, 5, 6]},
+          {"name": "Geoff", "data": [7, 8, 9]}],
+         ValueError),
+    ]
+)
+def test_attach_names(test, expected, expect_raises):
+    """Test name attachment works for an array of data and raises exceptions
+    for unexpected type and length mismatch."""
+    from inflammation.models import attach_names
+    if isinstance(test[0], list):
+        test[0] = np.array(test[0])
+    if expect_raises is not None:
+        with pytest.raises(expect_raises):
+            patients = attach_names(*test)
+            npt.assert_array_equal(np.array([patient["data"] for patient in patients]), test[0])
+            assert [patient["name"] for patient in patients] == test[1]
+    else:
+        patients = attach_names(*test)
+        npt.assert_array_equal(np.array([patient["data"] for patient in patients]), test[0])
+        assert [patient["name"] for patient in patients] == test[1]
