@@ -51,16 +51,18 @@ To view a record for a particular patient:
 python inflammation-analysis.py data/inflammation-01.csv --view record --patient 1
 ```
 
-You can also save a patient record as a json:
+You can also save a patient record as a json or csv file:
 
 ```
-python inflammation-analysis.py data/inflammation-01.csv --view to-json --json-path data/patients.json
+python inflammation-analysis.py data/inflammation-01.csv --view serialise --serial-path data/patients.json
+python inflammation-analysis.py data/inflammation-01.csv --view serialise --serial-path data/patients.csv
 ```
 
-Or read a patient's record from a json file:
+Or read a patient's record from a json or csv file:
 
 ```
-python inflammation-analysis.py data/inflammation-01.csv --view record --json-path data/patients.json
+python inflammation-analysis.py data/inflammation-01.csv --view record --patient 1 --serial-path data/patients.json
+python inflammation-analysis.py data/inflammation-01.csv --view record --patient 1 --serial-path data/patients.csv
 ```
 
 ## Contributing

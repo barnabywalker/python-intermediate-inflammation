@@ -31,8 +31,8 @@ def main(args):
             views.visualize(view_data)
 
         elif args.view == "record":
-            if args.json_path is not None:
-                patient = views.load_patient_records(args.json_path)[args.patient]
+            if args.serial_path is not None:
+                patient = views.load_patient_records(args.serial_path)[args.patient]
             else:
                 patient_data = inflammation_data[args.patient]
                 observations = [models.Observation(day, value) for day, value in enumerate(patient_data)]
@@ -40,13 +40,13 @@ def main(args):
 
             views.display_patient_record(patient)
 
-        elif args.view == "to-json":
+        elif args.view == "serialise":
             patients = []
             for i, item in enumerate(inflammation_data):
                 observations = [models.Observation(day, value) for day, value in enumerate(item)]
                 patients.append(models.Patient(f"patient{i:03d}", observations))
 
-            views.save_patient_records(patients, args.json_path)
+            views.save_patient_records(patients, args.serial_path)
 
 
 if __name__ == '__main__':
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         '--view',
         type=str,
         default="visualise",
-        choices=["visualise", "record", "to-json"],
+        choices=["visualise", "record", "serialise"],
         help="Which view should be used?"
     )
 
@@ -74,17 +74,10 @@ if __name__ == '__main__':
     )
 
     parser.add_argument(
-        "--json-path",
+        "--serial-path",
         type=str,
         default=None,
-        help="Where is the serialised patients JSON file?"
-    )
-
-    parser.add_argument(
-        "--to-json",
-        type=str,
-        default=None,
-        help="Where should the patient record be saved to?"
+        help="Where is the serialised patients file?"
     )
 
     args = parser.parse_args()
