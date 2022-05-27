@@ -2,7 +2,7 @@
 
 from matplotlib import pyplot as plt
 import numpy as np
-from inflammation.serializers import PatientJSONSerializer
+from inflammation.serializers import PatientJSONSerializer, PatientCSVSerializer
 
 def display_patient_record(patient):
     """Display data for a single patient."""
@@ -18,7 +18,13 @@ def save_patient_records(patients, path):
     :param path: A str specifying the json file to save to
     :returns: the path that was provided
     """
-    PatientJSONSerializer.save(patients, path)
+    if path.endswith(".json"):
+        PatientJSONSerializer.save(patients, path)
+    elif path.endswith(".csv"):
+        PatientCSVSerializer.save(patients, path)
+    else:
+        raise NotImplementedError(f"No serialiser implemented for file type {path.split('.')[-1]}")
+    
     return path
 
 
@@ -27,7 +33,13 @@ def load_patient_records(path):
     : param path: A str specifying the path to a json file to load data from.
     : returns: A list of patient objects.
     """
-    return PatientJSONSerializer.load(path)
+    if path.endswith(".json"):
+        data = PatientJSONSerializer.load(path)
+    elif path.endswith(".csv"):
+        data = PatientCSVSerializer.load(path)
+    else:
+        raise NotImplementedError(f"No serialiser implemented for file type {path.split('.')[-1]}")
+    return data
 
 
 def visualize(data_dict):
